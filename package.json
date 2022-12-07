@@ -1,8 +1,11 @@
 {
   "name": "gruenstromindex",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "Green Power Index (GrünstromIndex) for Node/Javascript",
-  "main": "lib.js",
+  "main": "src/lib.cjs",
+  "bin": {
+    "gruenstromindex":"./cli.js"
+  },
   "scripts": {
     "test": "mocha",
     "build": "webpack --config webpack.config.js --mode production",

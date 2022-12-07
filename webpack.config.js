@@ -12,7 +12,7 @@ export default {
   // Define the destination directory and filenames of compiled resources
   output: {
     filename: "js/[name].js",
-    path: path.resolve(process.cwd(), "./dist"),
+    path: path.resolve(process.cwd(), "./public"),
   },
 
   // Define development options

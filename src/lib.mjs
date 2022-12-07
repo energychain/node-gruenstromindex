@@ -1,6 +1,9 @@
-exports.gsi = function(options) {
-    const axios = require('axios');
+import  axios  from 'axios';
 
+export default function(options) {
+  
+//    const axios = require('axios');
+    
     const cache = {
 
     };
@@ -18,10 +21,18 @@ exports.gsi = function(options) {
             zip = await getZIP(zip);
         }
         if((typeof cache.prediction == 'undefined') || (cache.prediction == null) || (typeof cache.prediction._updated == 'undefined') || (cache.prediction._updated < new Date().getTime()-900000) || (cache.prediction.location.zip !== zip)) {
-            cache.prediction = (await _fetch_prediction(zip)).data;
+            const r = (await _fetch_prediction(zip)).data;
+            if(typeof r.err !== 'undefined') {
+                let err = 'Unable to fetch GSI.';
+                if(typeof r.message !== 'undefined') {
+                    err += ' '+r.message.err;
+                }
+                throw err;
+            }
+            cache.prediction = r;
             cache.prediction._updated = new Date().getTime();
         }
-
+        
         return cache.prediction;
     }
 

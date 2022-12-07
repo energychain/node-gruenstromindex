@@ -1,9 +1,10 @@
-import gsi from "./lib.cjs";
 import $ from 'jquery'
+import gsi from "./lib.mjs";
 
-const lib = gsi.gsi();
+const lib = gsi();
 
-window.GSI = lib;
+// Next Line registers globaly to window - which might not be a good idea
+window.GruenstromIndex = lib;
 
 const renderGSI = async function() {
     const r = await lib.prediction($('#fldZip').val());

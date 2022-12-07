@@ -1,7 +1,7 @@
 import { strict as assert } from 'node:assert';
-import gsi from "../src/lib.cjs";
+import gsi from "../src/lib.mjs";
 
-const lib = gsi.gsi();
+const lib = gsi();
 
 describe('Location Helper', function () {
     let ts = new Date().getTime();

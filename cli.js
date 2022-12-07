@@ -1,9 +1,25 @@
-const lib = require("./src/lib.cjs");
+#!/usr/bin/env node
 
-const app = async function() {
-    const gsi = lib.gsi();
+import gsi from "./src/lib.mjs";
 
-    console.log(await gsi.prediction('69256'));
+const lib = gsi();
+
+const app = async function(plz) {
+   const prediction = await lib.prediction(plz);
+   let table = [];
+   for(let i=0;i<prediction.forecast.length;i++) {
+    const row = {
+        date: new Date(prediction.forecast[i].timeStamp).toLocaleString(),
+        gsi: prediction.forecast[i].gsi,
+        co2: prediction.forecast[i].co2_g_standard
+    };
+    table.push(row);
+   }
+   console.table(table); 
 }
 
-app();
+if(process.argv.length < 3) {
+    console.error("usage: gruenstromindex <Postleitzahl>");
+} else {
+    app(process.argv[2]);
+}
