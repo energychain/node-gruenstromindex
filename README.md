@@ -58,6 +58,9 @@ if(process.argv.length < 3) {
     app(process.argv[2]);
 }
 ```
+### Browser/HTML
+
+See sample on [JSFiddle](https://jsfiddle.net/stromdao/z9m2aoh8/8/).
 
 ### Widget Development
 ```
