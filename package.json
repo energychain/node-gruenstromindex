@@ -1,0 +1,43 @@
+{
+  "name": "gruenstromindex",
+  "version": "1.0.0",
+  "description": "Green Power Index (GrünstromIndex) for Node/Javascript",
+  "main": "lib.js",
+  "scripts": {
+    "test": "mocha",
+    "build": "webpack --config webpack.config.js --mode production",
+    "dev": "webpack-dev-server --open --config webpack.config.js --mode development"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/energychain/node-gruenstromindex.git"
+  },
+  "keywords": [
+    "gruenstromindex",
+    "stromdao",
+    "corrently"
+  ],
+  "author": "STROMDAO GmbH <dev@stromdao.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/energychain/node-gruenstromindex/issues"
+  },
+  "homepage": "https://gruenstromindex.de/",
+  "dependencies": {
+    "axios": "^0.22.0",
+    "jquery": "^3.6.1"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@babel/core": "^7.20.5",
+    "@babel/preset-env": "^7.20.2",
+    "babel-loader": "^9.1.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "dotenv-webpack": "^8.0.1",
+    "html-webpack-plugin": "^5.5.0",
+    "mocha": "^10.1.0",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1"
+  }
+}
