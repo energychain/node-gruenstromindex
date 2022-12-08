@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://unpkg.com/tydids/public/js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/jsoneditor/dist/jsoneditor.min.css" rel="stylesheet" type="text/css">
+    <script src="https://cdn.jsdelivr.net/npm/jsoneditor/dist/jsoneditor.min.js"></script>
+
+    <title>GrünstromIndex - Validierung von Signaturen</title>
+</head>
+<body>
+    <div class="container" id="app">
+        <h1>Validierung <a href="http://gruenstromindex.de/">GrünstromIndex</a> Signaturen</h1>
+        <div class="alert alert-primary" role="alert" id="status" style="display:none"></div>
+        <form action="#" id="requestPLZ">
+            <label for="plz">GSI abrufen für welchen Ort?</label>
+            <div class="input-group">
+                <span class="input-group-text">Postleitzahl</span>
+                <input class="form-control" type="text" minlength="5" maxlength="5" required id="plz" name="plz" value="69256"/>
+                <button class="btn btn-primary" id="btnPLZ" type="submit">weiter</button>
+            </div>
+        </form>        
+        
+        <div class="row" style="margin-top:25px;">
+            <div class="col">
+                <div id="jsoneditor" class="w-100 h-100"></div>
+            </div>
+        </div>
+        <div class="row" style="display:none;margin-top:25px;" id="rowValidate">
+            <div class="col">
+                <button class="btn btn-primary w-100" id="validateNow">Signatur prüfen</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $("document").ready(function() {
+        $('#requestPLZ').submit(async function(e) {
+            $('#status').show();
+            e.preventDefault();
+            $('#plz').attr('disabled','disabled');
+            $('#btnPLZ').attr('disabled','disabled');
+            const url = 'https://api.corrently.io/v2.0/gsi/prediction?zip='+$('#plz').val();
+            $('#status').html("<strong>Abrufen</strong> "+url);
+            const response = await fetch(url);
+            const gsi = await response.json();
+            console.log(gsi);
+            $('#status').html("Aktuellen GrünstromIndex für Postleitzahl "+$('#plz').val()+" empfangen.");
+            setTimeout(function() {
+                $('#status').hide();
+            },3000);
+            $('#requestPLZ').hide();
+            const container = document.getElementById("jsoneditor")
+            const options = {}
+            const editor = new JSONEditor(container, options)
+            editor.set(gsi.forecast[0]);
+            
+            $('#rowValidate').show();
+
+            const validate = function() {              
+                const wallet = window.TyDIDs();
+                const signee = wallet.tydids.verifyMessage(editor.get());
+                
+                if(signee == '0xE7Fe0626D7B8e3F2e5ECD146F9b11daac1DBE447') {
+                    $('#status').removeClass('alert-primary');
+                    $('#status').removeClass('alert-warning');
+                    $('#status').removeClass('alert-danger');
+                    $('#status').addClass('alert-success');
+                    $('#status').html("<strong>Gültig</strong> Herausgeber ist STROMDAO GmbH.");
+                } else if(gsi.signee == signee) {
+                    $('#status').removeClass('alert-primary');
+                    $('#status').removeClass('alert-success');
+                    $('#status').removeClass('alert-danger');
+                    $('#status').addClass('alert-warning');
+                    $('#status').html("<strong>Gültig</strong> Herausgeber ist unbekannt.");
+                } else {
+                    $('#status').removeClass('alert-primary');
+                    $('#status').removeClass('alert-success');
+                    $('#status').removeClass('alert-warning');
+                    $('#status').addClass('alert-danger');
+                    $('#status').html("<strong>Ungültig</strong> Signatur ist nicht gültig. Daten wurden geändert.");
+                }
+                $('#status').show();
+                location.href='#status';
+            };
+
+            $('#validateNow').on('click',validate);
+            setTimeout(function() {
+                    validate();
+            },3010);
+        }); 
+    });
+</script>
+</html>

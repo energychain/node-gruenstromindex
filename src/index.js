@@ -8,7 +8,6 @@ window.GruenstromIndex = lib;
 
 const renderGSI = async function() {
     const r = await lib.prediction($('#fldZip').val());
-    console.log(r);
     let html = '<table class="table table-condensed">';
     html += '<tr><th>Zeit</th><th>GrünstromIndex</th><th>CO2/kWh</th></tr>';
     for(let i=0;i<r.forecast.length;i++) {

@@ -1,6 +1,6 @@
 import { strict as assert } from 'node:assert';
 import gsi from "../src/lib.mjs";
-import { wallet } from "tydids";
+import wallet from "tydids";
 
 const lib = gsi();
 
