@@ -1,5 +1,6 @@
 import { strict as assert } from 'node:assert';
 import gsi from "../src/lib.mjs";
+import { wallet } from "tydids";
 
 const lib = gsi();
 
@@ -43,6 +44,17 @@ describe('Green Power Index - Prediction', function () {
     it('Check query with Cityname Hemsbach works', async function () {
         const prediction = await lib.prediction('Hemsbach');
         assert.equal(prediction.location.zip, '69502');
+        return;
+    }); 
+    it('Offline validate digital signatures of forecast items', async function () {
+        const prediction = await lib.prediction('55131');
+        const testwallet = wallet();
+        for(let i=0;i<prediction.forecast.length;i++) 
+        {   const signature = prediction.forecast[i].signature;
+            let payload = prediction.forecast[i];
+            delete payload.signature;
+            assert.equal(testwallet.tydids.verifyMessage(payload,signature),prediction.signee);
+        }
         return;
     }); 
 });

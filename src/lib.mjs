@@ -1,9 +1,7 @@
 import  axios  from 'axios';
 
 export default function(options) {
-  
-//    const axios = require('axios');
-    
+      
     const cache = {
 
     };
